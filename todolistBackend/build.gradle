@@ -55,6 +55,7 @@ dependencies {
     testImplementation "org.apache.grails:grails-testing-support-datamapping"
     testImplementation "org.spockframework:spock-core"
     testImplementation "org.apache.grails:grails-testing-support-views-gson"
+    integrationTestImplementation "org.apache.grails:grails-testing-support-http-client"
 }
 
 compileJava.options.release = 17
