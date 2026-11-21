@@ -1,0 +1,37 @@
+# Sistema operacional
+Thumbs.db
+.DS_Store
+
+# Gradle
+.gradle/
+**/build/
+
+# Grails
+.grails/
+**/target/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+**/out/
+
+# Eclipse
+.project
+.settings/
+.classpath
+
+# Java
+*.class
+*.log
+hs_err_pid*
+
+# Arquivos de ambiente e credenciais
+.env
+.env.*
+!.env.example
+
+# Arquivos temporários
+*.tmp
+*.bak

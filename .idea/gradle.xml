@@ -12,6 +12,14 @@
         </option>
         <option name="myGradleHome" value="" />
       </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/todolistBackend" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/todolistBackend" />
+          </set>
+        </option>
+      </GradleProjectSettings>
     </option>
   </component>
 </project>
