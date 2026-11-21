@@ -44,4 +44,12 @@ class TarefaServiceSpec extends Specification
         then:
         service.buscar(criada.id) == null
     }
+
+    void "deve buscar categoria pelo identificador"() {
+        given:
+        Categoria categoria = new Categoria(nome: 'Trabalho').save(flush: true)
+
+        expect:
+        service.buscarCategoria(categoria.id)?.nome == 'Trabalho'
+    }
 }

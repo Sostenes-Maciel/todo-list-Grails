@@ -5,10 +5,11 @@ class TarefaController {
     static responseFormats = ['json']
 
     static allowedMethods = [
-            index: 'GET',
-            show: 'GET',
-            save: 'POST',
+            index : 'GET',
+            show  : 'GET',
+            save  : 'POST',
             update: 'PUT',
+            patch : 'PATCH',
             delete: 'DELETE'
     ]
 
@@ -59,6 +60,33 @@ class TarefaController {
             return
         }
 
+        if (!preencherTarefa(tarefa, true)) {
+            return
+        }
+
+        if (!tarefa.validate()) {
+            responderErros(tarefa)
+            return
+        }
+
+        Tarefa atualizada = tarefaService.salvar(tarefa)
+
+        if (!atualizada) {
+            responderErros(tarefa)
+            return
+        }
+
+        respond atualizada
+    }
+
+    def patch(Long id) {
+        Tarefa tarefa = tarefaService.buscar(id)
+
+        if (!tarefa) {
+            respond([erro: 'Tarefa não encontrada.'], status: 404)
+            return
+        }
+
         if (!preencherTarefa(tarefa)) {
             return
         }
@@ -91,11 +119,24 @@ class TarefaController {
         render status: 204
     }
 
-    private boolean preencherTarefa(Tarefa tarefa) {
+    private boolean preencherTarefa(
+            Tarefa tarefa,
+            boolean substituicaoCompleta = false
+    ) {
         Map dados = new LinkedHashMap(request.JSON as Map)
 
-        boolean possuiCategoria = dados.containsKey('categoriaId')
+        boolean possuiCategoriaId = dados.containsKey('categoriaId')
         def categoriaId = dados.remove('categoriaId')
+
+        if (substituicaoCompleta) {
+            tarefa.nome = null
+            tarefa.descricao = null
+            tarefa.dataTermino = null
+            tarefa.prioridade = null
+            tarefa.status = null
+            tarefa.horarioAlarme = null
+            tarefa.categoria = null
+        }
 
         bindData(tarefa, dados, [
                 include: [
@@ -108,11 +149,20 @@ class TarefaController {
                 ]
         ])
 
-        if (possuiCategoria) {
+        if (possuiCategoriaId || substituicaoCompleta) {
             if (categoriaId == null) {
                 tarefa.categoria = null
             } else {
-                Categoria categoria = Categoria.get(categoriaId as Long)
+                Long idCategoria
+
+                try {
+                    idCategoria = categoriaId.toString().toLong()
+                } catch (NumberFormatException e) {
+                    respond([erro: 'Identificador de categoria inválido.'], status: 422)
+                    return false
+                }
+
+                Categoria categoria = tarefaService.buscarCategoria(idCategoria)
 
                 if (!categoria) {
                     respond([erro: 'Categoria não encontrada.'], status: 422)

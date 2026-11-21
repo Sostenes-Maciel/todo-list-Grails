@@ -32,4 +32,12 @@ class TarefaService {
     void excluir(Tarefa tarefa) {
         tarefa.delete(flush: true)
     }
+
+    Categoria buscarCategoria(Long id) {
+        if (id == null) {
+            return null
+        }
+
+        Categoria.get(id)
+    }
 }

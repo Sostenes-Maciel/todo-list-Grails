@@ -71,6 +71,22 @@ class TarefaApiSpec extends Specification implements HttpClientSupport {
         ])
 
         when:
+        def atualizacaoParcial = httpPatchJson(
+                "/api/tarefas/${tarefaCriadaId}",
+                null,
+                [descricao: 'Descrição alterada parcialmente']
+        )
+
+        then:
+        atualizacaoParcial.assertStatus(200)
+        atualizacaoParcial.assertJsonContains([
+                nome: 'Tarefa atualizada pelo teste',
+                descricao: 'Descrição alterada parcialmente',
+                prioridade: 4,
+                status: 'DOING'
+        ])
+
+        when:
         def exclusao = httpDelete("/api/tarefas/${tarefaCriadaId}")
 
         then:
@@ -102,4 +118,5 @@ class TarefaApiSpec extends Specification implements HttpClientSupport {
         then:
         resposta.assertStatus(404)
     }
+
 }
