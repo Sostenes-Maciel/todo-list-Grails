@@ -1,0 +1,41 @@
+@baseUrl = http://localhost:8080
+@tarefaId = 1
+
+### 1. Listar tarefas
+GET {{baseUrl}}/api/tarefas
+Accept: application/json
+
+### 2. Criar tarefa
+POST {{baseUrl}}/api/tarefas
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Validar API Grails",
+  "descricao": "Primeira tarefa criada pela API REST",
+  "dataTermino": "2026-11-30",
+  "prioridade": 3,
+  "status": "TODO",
+  "horarioAlarme": "2026-11-22T14:30:00"
+}
+
+### 3. Buscar tarefa por ID
+GET {{baseUrl}}/api/tarefas/{{tarefaId}}
+Accept: application/json
+
+### 4. Atualizar tarefa
+PUT {{baseUrl}}/api/tarefas/{{tarefaId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Tarefa atualizada",
+  "descricao": "Descrição modificada pela API",
+  "dataTermino": "2026-12-05",
+  "prioridade": 4,
+  "status": "DOING"
+}
+
+### 5. Excluir tarefa
+DELETE {{baseUrl}}/api/tarefas/{{tarefaId}}
+Accept: application/json
