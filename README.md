@@ -358,5 +358,147 @@ Para executar toda a suíte no terminal, use:
 - **Integração MCP do GitHub:** uso de ferramentas de contexto do repositório para contornar limitações técnicas e manter a rastreabilidade de Issues e Pull Requests.
 - **Comparação de Modelos:** avaliação comparativa de Code Review entre o agente principal e um modelo alternativo, documentada em `RELATORIO.md`.
 
+# Atualização — Migração do Backend para Grails
+
+O backend do TODO-List foi atualizado para utilizar o **Grails Framework 8.0.0**, adotando uma arquitetura de APIs RESTful e persistência de dados utilizando GORM e PostgreSQL.
+
+A atualização substitui o armazenamento em memória da implementação Java anterior por um banco de dados relacional, disponibilizando operações de gerenciamento de tarefas por meio de endpoints HTTP.
+
+## Tecnologias utilizadas
+
+| Tecnologia | Finalidade |
+|---|---|
+| Java 21 (Zulu JDK) | Ambiente de execução |
+| Grails 8.0.0 | Framework para desenvolvimento do backend |
+| Groovy | Linguagem utilizada na implementação |
+| Spring Boot | Infraestrutura de execução da aplicação |
+| GORM | Mapeamento objeto-relacional e persistência |
+| Hibernate | Integração com o banco de dados |
+| PostgreSQL 18.6 | Banco de dados relacional |
+| Gradle | Gerenciamento de dependências e execução |
+| Spock | Testes automatizados |
+| H2 | Banco em memória utilizado nos testes |
+
+## Arquitetura e padrões utilizados
+
+O backend segue a arquitetura MVC, mantendo a separação de responsabilidades entre seus componentes.
+
+- **Controller:** recebe as requisições HTTP, realiza o tratamento dos dados e retorna respostas no formato JSON.
+- **Service:** concentra as operações relacionadas ao gerenciamento das tarefas, desacoplando a lógica dos Controllers.
+- **Domain Classes:** representam as entidades persistentes e suas regras de validação.
+- **GORM:** realiza as operações de persistência e comunicação com o banco de dados.
+
+A aplicação também utiliza o padrão Service Layer para organizar as operações de negócio e o mapeamento REST disponibilizado pelo Grails.
+
+## Funcionalidades implementadas
+
+O backend disponibiliza as operações de CRUD de tarefas:
+
+| Operação | Método HTTP | Endpoint |
+|---|---|---|
+| Listar tarefas | GET | `/api/tarefas` |
+| Consultar tarefa por ID | GET | `/api/tarefas/{id}` |
+| Criar tarefa | POST | `/api/tarefas` |
+| Atualizar tarefa | PUT | `/api/tarefas/{id}` |
+| Excluir tarefa | DELETE | `/api/tarefas/{id}` |
+
+### Modelagem e persistência
+
+Foram implementadas as seguintes estruturas:
+
+- **Tarefa:** armazena nome, descrição, prazo, prioridade, categoria, status e horário do alarme.
+- **Categoria:** representa a categoria associada às tarefas.
+- **Status:** enumeração com os estados TODO, DOING e DONE.
+
+O GORM é responsável pelo mapeamento das Domain Classes e pela persistência dos registros no PostgreSQL.
+
+### Validações
+
+- Prioridade obrigatoriamente entre 1 e 5.
+- Status inicial definido como TODO.
+- Nome da categoria obrigatório e não vazio.
+- Verificação da existência da categoria quando informada na requisição.
+
+## Testes automatizados
+
+Foram desenvolvidos testes utilizando Spock, organizados em testes unitários e de integração.
+
+| Classe de teste | Objetivo |
+|---|---|
+| StatusSpec | Validar as transições de status |
+| TarefaSpec | Verificar as validações da entidade |
+| TarefaServiceSpec | Testar as operações de persistência |
+| TarefaApiSpec | Validar os endpoints e o fluxo CRUD |
+
+Os testes de integração utilizam o ambiente de testes configurado com H2, mantendo o banco de desenvolvimento PostgreSQL independente.
+
+## Como executar o projeto
+
+### Pré-requisitos
+
+- Java 21 ou superior compatível com a aplicação.
+- PostgreSQL 18 ou compatível.
+- Banco de dados `todolist_bd` criado.
+- Gradle Wrapper disponibilizado no projeto.
+
+### Configuração do banco de dados
+
+O backend utiliza PostgreSQL como banco de dados principal.
+
+A conexão é configurada no arquivo `grails-app/conf/application.yml`, utilizando as seguintes variáveis de ambiente:
+
+```properties
+TODO_DB_USERNAME=seu_usuario
+TODO_DB_PASSWORD=sua_senha
+```
+
+O endereço configurado para desenvolvimento é:
+
+```text
+jdbc:postgresql://localhost:5432/todolist_bd
+```
+
+As credenciais devem ser configuradas no ambiente de execução, sem serem armazenadas no repositório.
+
+### Inicialização
+
+Na pasta `todolistBackend`, execute:
+
+```bash
+./gradlew bootRun
+```
+
+A aplicação ficará disponível em:
+
+```text
+http://localhost:8080
+```
+
+### Execução dos testes
+
+Para executar os testes unitários:
+
+```bash
+./gradlew test
+```
+
+Para executar os testes de integração:
+
+```bash
+./gradlew integrationTest
+```
+
+## Documentação da API
+
+A documentação dos endpoints, métodos HTTP, parâmetros, exemplos JSON e códigos de resposta está disponível em:
+
+[`docs/api.md`](docs/api.md)
+
+## Escopo da atualização
+
+Esta atualização contempla exclusivamente a implementação e disponibilização do backend utilizando Grails e APIs RESTful.
+
+Não faz parte do escopo a integração com o frontend ou a implementação de uma nova interface de usuário.
+
 ## 👨‍💻 Autor
 **Sóstenes Marques Maciel**
