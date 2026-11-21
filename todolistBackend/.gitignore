@@ -35,3 +35,7 @@ hs_err_pid*
 # Arquivos temporários
 *.tmp
 *.bak
+
+# Configurações locais com credenciais
+application-local.yml
+application-secrets.yml

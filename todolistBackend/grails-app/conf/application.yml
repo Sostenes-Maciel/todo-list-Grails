@@ -27,8 +27,11 @@ dataSource:
 environments:
     development:
         dataSource:
-            dbCreate: create-drop
-            url: jdbc:h2:mem:devDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+            dbCreate: update
+            driverClassName: org.postgresql.Driver
+            url: jdbc:postgresql://localhost:5432/todolist_bd
+            username: ${TODO_DB_USERNAME}
+            password: ${TODO_DB_PASSWORD}
     test:
         dataSource:
             dbCreate: update
