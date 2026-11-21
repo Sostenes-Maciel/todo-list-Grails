@@ -492,7 +492,7 @@ Para executar os testes de integração:
 
 A documentação dos endpoints, métodos HTTP, parâmetros, exemplos JSON e códigos de resposta está disponível em:
 
-[`docs/api.md`](docs/api.md)
+[Documentação da API](todolistBackend/docs/api.md)
 
 ## Escopo da atualização
 
